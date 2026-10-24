@@ -1,0 +1,15 @@
+# Build output (the exe is published in GitHub Releases, not in the repository)
+PassGen.exe
+PassGen.new.exe
+PassGen.old.exe
+
+# User data. PassGen keeps it next to the exe - it must never end up in the repository.
+# passwords.txt holds your passwords in clear text!
+passwords.txt
+PassGen.ini
+
+# Junk
+*.log
+*.tmp
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,58 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build PassGen.exe
+        shell: cmd
+        run: build.bat
+
+      - name: Generator tests
+        shell: cmd
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File tests\GeneratorTests.ps1
+
+      - name: Localization tests
+        shell: cmd
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File tests\LocalizationTests.ps1
+
+      - name: Upload PassGen.exe as an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PassGen
+          path: PassGen.exe
+          if-no-files-found: error
+
+  release:
+    # A release is created for a tag like v1.3.0: the exe and its checksum are attached to it
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: PassGen
+
+      - name: Checksum
+        run: sha256sum PassGen.exe > PassGen.exe.sha256
+
+      - name: Create the release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            PassGen.exe
+            PassGen.exe.sha256
+          generate_release_notes: true

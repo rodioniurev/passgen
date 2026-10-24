@@ -1,0 +1,12 @@
+# Normalize line endings automatically
+* text=auto
+
+# cmd.exe and Windows PowerShell 5.1 read files with CRLF most reliably
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+*.cs  text diff=csharp
+*.md  text diff=markdown
+
+*.png binary
+*.ico binary

@@ -1,0 +1,25 @@
+root = true
+
+# Windows-only project: line endings in the working folder are CRLF.
+# In the git repository they are stored as LF (see .gitattributes) and turned back into CRLF on checkout.
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# The sources and scripts contain Cyrillic and accented text, and Windows PowerShell 5.1 and old compilers
+# read UTF-8 without a BOM as ANSI - so the BOM is required.
+[*.{cs,ps1}]
+charset = utf-8-bom
+
+[*.bat]
+charset = latin1
+
+[*.{yml,yaml,json,manifest}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
